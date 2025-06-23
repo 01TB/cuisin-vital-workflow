@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "pg-nest": "^0.2.0"
+  }
+}

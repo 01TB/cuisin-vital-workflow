@@ -1,0 +1,120 @@
+IDE : Visual Studio Code
+Database : psql (PostgreSQL) 17.2
+    - user : postgres
+    - password : berthin
+    - database : cuisine-db
+
+Back-end : in Nest.js
+Use the database structure and all the tools in base-v8.sql to create the back-end part of this project with Nest.js.
+
+This is the explication of the project, unfortunatly it is in french : 
+    Différences par rapport à la concurrence : 
+    - Produits respectant des règles d'hygiène strictes 
+    - Prix fixe pour chaque catégorie de menu (variation en fonction des différents évènements)
+
+Règles de gestion :
+    - Aboonement mensuel entreprise :
+        Pour les entreprises (abonnements) :
+            - Chaque semaine, l'entreprise cliente choisit ses menus parmi la sélection proposée (11 menus pour GOLD, 5 pour SILVER).
+            - Le Chef Cuisinier reçoit hebdomadairement les bons de commande des entreprises abonnées.
+            - La quantité de menus à préparer par plat et par boisson (pour GOLD) est déterminée en fonction du nombre d'employés et de leur sélection quotidienne.
+
+        - GOLD :
+            - 11 menus disponibles
+            - l'entreprise choisit 5 menus pour la semaine parmis les 11 menus
+            - le prix d'un abonnement pour 1 personne (soit un menu) est fixé à 15000Ar par jour :
+                - boisson : 2000Ar
+                - Packaging : 2000Ar
+                - Ingrédient (prix fixe) : 6000Ar
+                - Dessert : 2000Ar
+                - Bénéfice : 20% total dépense
+                - Prix à la carte arrondi au millième
+            - chaque menu a :
+                - une petite entrée (change tous les jours)
+                - un petit dessert (change tous les jours)
+                - une boisson au choix 
+            - La quantité de menus à préparer pour l'entreprise pour 1 jour dans la semaine se fait en fonction des 5 menus pour la semaine 
+                - exemple pour un jour :
+                    - 5 menus dispo choisis : plat1, plat2, plat3, plat4, plat5
+                    - nombre d'employés de l'entreprise : 30
+                    - pour ce jour :
+                        - plat1 * 5
+                        - plat2 * 5
+                        - plat3 * 7
+                        - plat4 * 3
+                        - plat5 * 10
+                        - boisson1 * 10
+                        - boisson2 * 10
+                        - boisson3 * 10
+        - SILVER :
+            - 5 menus disponibles
+            - l'entreprise choisit 5 menus pour la semaine parmis les 5 menus
+            - le prix d'un abonnement pour 1 personne (soit un menu) est fixé à 7000Ar par jour :
+                - Packaging : 2000Ar
+                - Ingrédient (prix fixe) : 4000Ar
+                - Bénéfice : 10% total dépense
+                - Prix à la carte arrondi au millième
+            - chaque menu n'a pas :
+                - une petite entrée (change tous les jours)
+                - un petit dessert (change tous les jours)
+                - une boisson au choix 
+            - La quantité de menus à préparer pour l'entreprise pour 1 jour dans la semaine se fait en fonction des 5 menus pour la semaine 
+                - exemple pour un jour :
+                    - 5 menus dispo choisis : plat1, plat2, plat3, plat4, plat5
+                    - nombre d'employés de l'entreprise : 30
+                    - pour ce jour :
+                        - plat1 * 5
+                        - plat2 * 5
+                        - plat3 * 7
+                        - plat4 * 3
+                        - plat5 * 10
+
+        - Achat individuel (particulier) :
+            Gestion simultanée des commandes individuelles des particuliers et des abonnements des entreprises en distinguant clairement les flux de commandes et en adaptant les processus de gestion et de production.
+            Gestion des commandes individuelles et des abonnements en réalité
+
+            1. Distinction des types de commandes :
+
+                Commandes individuelles : Ces commandes proviennent de clients particuliers, sont ponctuelles, et sont passées via le menu "à la carte" de Madio.
+                Commandes d'entreprise (abonnements) : Ces commandes sont récurrentes et pré-établies sur une base hebdomadaire, selon les forfaits GOLD ou SILVER.
+
+            2. Processus de commande :
+
+                - Pour les particuliers :
+                    - Les clients consultent le menu disponible en ligne.
+                    - Ils passent leur commande via l'interface de l'application.
+                    - Le paiement est effectué en ligne (CB, PayPal, etc.).
+                    - La commande est traitée comme une commande "à la carte" standard.
+                - Pour les entreprises (abonnements) :
+                    - Chaque semaine, l'entreprise cliente choisit ses menus parmi la sélection proposée (11 menus pour GOLD, 5 pour SILVER).
+                    - Le Chef Cuisinier reçoit hebdomadairement les bons de commande des entreprises abonnées.
+                    - La quantité de menus à préparer par plat et par boisson (pour GOLD) est déterminée en fonction du nombre d'employés et de leur sélection quotidienne.
+
+            3. Gestion de la production en cuisine :
+
+                - Centralisation des informations : L'interface de production en cuisine affiche toutes les commandes en cours, qu'elles soient individuelles ou d'entreprise.
+                - Planification des quantités :
+                    - Pour les commandes individuelles, les quantités sont ajoutées au fur et à mesure.
+                    - Pour les abonnements, les quantités sont connues à l'avance pour la semaine, ce qui permet une meilleure planification des achats d'ingrédients.
+                - Optimisation des tâches : Les cuisiniers peuvent visualiser les commandes à préparer et changer le statut des plats (en préparation → prêt). L'estimation du temps de préparation par plat aide à la planification.
+
+            4. Gestion des stocks et des approvisionnements :
+
+                - L'inventaire en temps réel des ingrédients et matières premières est crucial.
+                - Les alertes de stock faible et le calcul automatique des besoins s'appliquent à l'ensemble des commandes, en tenant compte des besoins récurrents des abonnements et des variations des commandes individuelles.
+                - La gestion des dates de péremption est essentielle pour tous les stocks.
+
+            5. Gestion des livraisons :
+
+                - Les livraisons sont attribuées aux livreurs.
+                - Le suivi GPS en temps réel et le calcul d'itinéraires sont utilisés pour toutes les livraisons, optimisant les tournées des livreurs qui peuvent regrouper des livraisons individuelles et d'entreprise si géographiquement proches.
+                - Les zones de livraison sont définies pour une meilleure organisation.
+
+            6. Facturation et suivi financier :
+
+                - La facturation automatique est mise en place pour toutes les commandes.
+                - Pour les abonnements, la facturation est mensuelle, basée sur le nombre d'abonnés et le forfait (GOLD/SILVER).
+                - Pour les commandes individuelles, la facturation est effectuée à chaque commande.
+                - L'intégration comptable permet l'exportation des données vers les logiciels de comptabilité.
+    
+The reste 
