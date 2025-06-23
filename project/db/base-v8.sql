@@ -242,7 +242,10 @@ CREATE TABLE commandes_individuelles (
     montant_total DECIMAL(10,2) NOT NULL,
     livreur_id UUID REFERENCES utilisateurs(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP DEFAULT NULL
+    deleted_at TIMESTAMP DEFAULT NULL,
+    CONSTRAINT chk_client_particulier CHECK (
+        (SELECT type_client FROM clients WHERE id = client_id) = 'PARTICULIER'
+    )
 );
 
 -- Commandes entreprises (abonnements)
@@ -258,7 +261,10 @@ CREATE TABLE commandes_entreprises (
     montant_total DECIMAL(10,2) NOT NULL,
     livreur_id UUID REFERENCES utilisateurs(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP DEFAULT NULL
+    deleted_at TIMESTAMP DEFAULT NULL,
+    CONSTRAINT chk_client_entreprise CHECK (
+        (SELECT type_client FROM clients WHERE id = client_id) = 'ENTREPRISE'
+    )
 );
 
 -- Détails des commandes individuelles
@@ -365,7 +371,10 @@ CREATE TABLE factures_individuelles (
     montant_ttc DECIMAL(10,2) NOT NULL,
     statut VARCHAR(15) DEFAULT 'EMISE' CHECK (statut IN ('EMISE', 'PAYEE', 'ANNULEE')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP DEFAULT NULL
+    deleted_at TIMESTAMP DEFAULT NULL,
+    CONSTRAINT chk_client_particulier_facture CHECK (
+        (SELECT type_client FROM clients WHERE id = client_id) = 'PARTICULIER'
+    )
 );
 
 -- Factures entreprises (mensuelles)
@@ -383,7 +392,10 @@ CREATE TABLE factures_entreprises (
     nb_repas_factures INTEGER NOT NULL,
     statut VARCHAR(15) DEFAULT 'EMISE' CHECK (statut IN ('EMISE', 'PAYEE', 'ANNULEE')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP DEFAULT NULL
+    deleted_at TIMESTAMP DEFAULT NULL,
+    CONSTRAINT chk_client_entreprise_facture CHECK (
+        (SELECT type_client FROM clients WHERE id = client_id) = 'ENTREPRISE'
+    )
 );
 
 -- Détails des factures individuelles
